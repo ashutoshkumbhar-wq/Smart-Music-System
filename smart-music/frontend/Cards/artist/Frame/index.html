@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artist Mix</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Link to your external CSS file -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gray-900 text-white">
+
+    <main class="relative w-full min-h-screen overflow-hidden flex flex-col items-center justify-center p-4">
+        <!-- Background Image -->
+        <div class="absolute inset-0 w-full h-full bg-cover bg-center" style="background-image: url('frame.jpg');"></div>
+        <!-- Adding a semi-transparent overlay to darken the background -->
+        <div class="absolute inset-0 bg-black opacity-70"></div>
+
+        <!-- Spotlights Container -->
+        <div id="spotlight-container" class="absolute top-0 left-0 w-full h-full">
+            <div class="spotlight" style="transform: translateX(-65%) rotate(-15deg);"></div>
+            <div class="spotlight" style="transform: translateX(-35%) rotate(15deg);"></div>
+        </div>
+
+        <div class="relative z-10 w-full max-w-lg text-center">
+            <h1 class="text-4xl md:text-6xl font-bold mb-4">Artist Mix</h1>
+            <p class="text-lg md:text-xl text-gray-300 mb-8">Enter an artist's name to generate their mix.</p>
+
+            <!-- Search Form -->
+            <form id="search-form" class="flex flex-col sm:flex-row gap-4">
+                <input 
+                    type="text" 
+                    id="artist-search" 
+                    class="w-full px-5 py-3 rounded-lg bg-gray-800 text-white border-2 border-transparent focus:border-yellow-400 focus:outline-none transition" 
+                    placeholder="E.g., Arijit Singh"
+                    required
+                >
+                <button 
+                    type="submit" 
+                    class="bg-yellow-400 text-gray-900 font-bold px-8 py-3 rounded-lg hover:bg-yellow-500 transition-transform transform hover:scale-105"
+                >
+                    Search
+                </button>
+            </form>
+        </div>
+
+        <!-- Spotify Player Container -->
+        <div id="spotify-player-container" class="relative z-10 mt-12 w-full max-w-lg">
+            <!-- The initial artist image will be replaced by the Spotify player -->
+            <div id="initial-artist-display" class="relative w-48 h-48 md:w-64 md:h-64 mx-auto rounded-3xl overflow-hidden shadow-2xl shadow-yellow-100/20">
+                <img 
+                    src="https://i.scdn.co/image/ab6761610000e5eb0261696c5df3be99da6ed3f3" 
+                    alt="Portrait of Arijit Singh" 
+                    class="w-full h-full object-cover"
+                    onerror="this.onerror=null;this.src='https://placehold.co/256x256/222/FFF?text=Artist';"
+                >
+            </div>
+        </div>
+        
+        <!-- Crowd Silhouette -->
+        <div id="crowd-container" class="absolute bottom-0 left-0 w-full h-1/3 z-20 pointer-events-none">
+             <img src="https://www.transparentpng.com/thumb/crowd-silhouette/7-crowd-silhouette-png-images-download-zT8x0i.png" 
+                alt="Crowd silhouette" 
+                class="w-full h-full object-cover object-bottom"
+                onerror="this.style.display='none'"
+             />
+             <div class="absolute bottom-0 w-full h-full bg-gradient-to-t from-black via-black/70 to-transparent"></div>
+        </div>
+
+    </main>
+    
+    <!-- Link to your external JavaScript file -->
+    <script src="script.js"></script>
+</body>
+</html>

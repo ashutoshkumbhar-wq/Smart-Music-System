@@ -1,0 +1,371 @@
+/* style1.css - ULTRA-DARK #010108 + WHITE GLASS THEME */
+/* Fully compatible with your HTML + Tailwind */
+
+/* --- :root – Ultra-Dark #010108 + White Glass --- */
+:root {
+    --bg-primary: #010108;
+    --bg-secondary: #03030a;
+    --bg-glass: rgba(1, 1, 8, 0.72);
+
+    --text-primary: #ffffff;
+    --text-secondary: rgba(255, 255, 255, 0.88);
+    --text-muted: rgba(255, 255, 255, 0.55);
+
+    --accent: #ffffff;
+    --accent-hover: rgba(255, 255, 255, 0.95);
+    --accent-glow: rgba(255, 255, 255, 0.35);
+    --accent-glow-soft: rgba(255, 255, 255, 0.18);
+    --accent-white-border: rgba(255, 255, 255, 0.25);
+
+    --border-subtle: rgba(255, 255, 255, 0.09);
+    --border-medium: rgba(255, 255, 255, 0.16);
+    --border-glass: rgba(255, 255, 255, 0.14);
+    --border-glow: rgba(255, 255, 255, 0.22);
+
+    --surface-1: rgba(255, 255, 255, 0.025);
+    --surface-2: rgba(255, 255, 255, 0.045);
+    --surface-3: rgba(255, 255, 255, 0.07);
+    --surface-glass: rgba(3, 3, 10, 0.55);
+
+    --radius-sm: 10px;
+    --radius-md: 14px;
+    --radius-lg: 22px;
+    --radius-xl: 32px;
+    --radius-full: 9999px;
+
+    --transition-fast: 180ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-base: 280ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-smooth: 420ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+    --glass-blur: blur(18px);
+    --glass-border: 1px solid var(--border-glass);
+}
+
+/* --- Global --- */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    height: 100%;
+    background: 
+        radial-gradient(circle at 15% 85%, rgba(1, 1, 8, 0.9), transparent 60%),
+        radial-gradient(circle at 85% 15%, rgba(255, 255, 255, 0.03), transparent 60%),
+        var(--bg-primary);
+    background-attachment: fixed;
+    color: var(--text-primary);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+}
+
+/* --- Header --- */
+.gradient-bg {
+    background: linear-gradient(135deg, rgba(3, 3, 10, 0.8), rgba(1, 1, 8, 0.6));
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border-bottom: 1px solid var(--border-glass);
+    box-shadow: 
+        0 10px 36px rgba(1, 1, 8, 0.7),
+        0 1px 0 rgba(255, 255, 255, 0.06) inset;
+    position: relative;
+    overflow: hidden;
+}
+
+.gradient-bg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+    animation: shimmer 8s infinite linear;
+    pointer-events: none;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-120%); }
+    100% { transform: translateX(120%); }
+}
+
+/* --- Tailwind Overrides --- */
+.bg-gray-900 {
+    background: var(--surface-1) !important;
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: var(--glass-border);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 6px 24px rgba(1, 1, 8, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.bg-gray-800 {
+    background: var(--surface-2) !important;
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    transition: all var(--transition-base);
+}
+
+.bg-gray-700 {
+    background: var(--surface-3) !important;
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: var(--glass-border);
+    border-radius: var(--radius-lg);
+    min-height: 110px;
+    padding: 1rem;
+    transition: all var(--transition-base);
+    position: relative;
+    overflow: hidden;
+}
+
+.bg-gray-700::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    pointer-events: none;
+}
+
+/* --- Pulse --- */
+.pulse-animation {
+    animation: pulse-white 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    position: relative;
+}
+
+.pulse-animation::after {
+    content: '';
+    position: absolute;
+    inset: -5px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--accent-glow), transparent 70%);
+    opacity: 0;
+    animation: pulse-glow 2s infinite;
+    pointer-events: none;
+}
+
+@keyframes pulse-white {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.75; }
+}
+
+@keyframes pulse-glow {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 0.35; }
+}
+
+/* --- Card Hover --- */
+.card-hover {
+    position: relative;
+    overflow: hidden;
+    transition: all var(--transition-base);
+    cursor: pointer;
+}
+
+.card-hover:hover {
+    transform: translateY(-5px);
+    border-color: var(--border-glow) !important;
+    box-shadow: 
+        0 18px 38px rgba(1, 1, 8, 0.55),
+        0 0 0 1px var(--accent-white-border),
+        0 0 28px var(--accent-glow-soft);
+    z-index: 10;
+}
+
+.card-hover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 0%, var(--accent-glow), transparent 65%);
+    opacity: 0;
+    transition: opacity var(--transition-base);
+    pointer-events: none;
+    border-radius: inherit;
+}
+
+.card-hover:hover::before {
+    opacity: 1;
+}
+
+/* --- Recommended Mode (Balanced) --- */
+[data-mode="balanced"] {
+    position: relative;
+    overflow: hidden;
+    box-shadow: 
+       /* 0 0 0 2px var(--accent),*/ 
+        0 5px 22px rgba(1, 1, 8, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    transition: all var(--transition-base);
+}
+
+[data-mode="balanced"]::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+    pointer-events: none;
+}
+
+[data-mode="balanced"]:hover {
+    transform: translateY(-6px);
+    box-shadow: 
+        0 0 0 2.5px var(--accent),
+        0 22px 44px rgba(1, 1, 8, 0.65),
+        0 0 36px var(--accent-glow-soft);
+}
+
+/* --- Buttons --- */
+.bg-gradient-to-r {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+    background: rgba(255, 255, 255, 0.07);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--border-glass);
+    border-radius: var(--radius-full);
+    color: var(--text-primary);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    white-space: nowrap;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 14px rgba(1, 1, 8, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.bg-gradient-to-r:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: var(--accent-white-border);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 26px rgba(1, 1, 8, 0.5), 0 0 22px var(--accent-glow-soft);
+}
+
+.bg-gradient-to-r:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Primary Gradient Button (from-purple-600 to-blue-600) */
+.bg-gradient-to-r.bg-white,
+.bg-gradient-to-r.from-purple-600 {
+    background: #ffffff !important;
+    border: none !important;
+    color: #010108 !important;
+    font-weight: 700;
+    box-shadow: 0 8px 22px rgba(1, 1, 8, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.bg-gradient-to-r.from-purple-600:hover:not(:disabled) {
+    background: #f8f8f8 !important;
+    transform: translateY(-3px);
+    box-shadow: 0 12px 34px rgba(1, 1, 8, 0.7), 0 0 30px rgba(255, 255, 255, 0.5);
+}
+
+/* --- Generate Profile Button (Blue) --- */
+#generate-profile-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--border-glass);
+    backdrop-filter: var(--glass-blur);
+}
+
+#generate-profile-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: var(--accent-white-border);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(1, 1, 8, 0.5);
+}
+
+/* --- Loading Overlay --- */
+#loading-overlay {
+    background: rgba(1, 1, 8, 0.85);
+    backdrop-filter: blur(12px);
+}
+
+/* --- Text Selection --- */
+::selection {
+    background: rgba(255, 255, 255, 0.22);
+    color: var(--text-primary);
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+    .gradient-bg, .bg-gray-800, .bg-gray-700 {
+        padding: 1rem;
+    }
+    .bg-gradient-to-r {
+        padding: 8px 16px;
+        font-size: 12px;
+    }
+}
+/* --- Pill Back Button (Exact Match) --- */
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 9999px; /* Full pill */
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all var(--transition-base);
+    box-shadow: 
+        0 4px 12px rgba(1, 1, 8, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+    z-index: 10;
+}
+
+.back-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.15), transparent 70%);
+    opacity: 0;
+    transition: opacity var(--transition-base);
+    border-radius: inherit;
+    pointer-events: none;
+}
+
+.back-btn:hover::before {
+    opacity: 1;
+}
+
+.back-btn:hover {
+    background: rgba(255, 255, 255, 0.14);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 
+        0 8px 20px rgba(1, 1, 8, 0.5),
+        0 0 18px rgba(255, 255, 255, 0.12);
+}
+
+.back-btn:active {
+    transform: translateY(0);
+}
+
+/* Arrow Icon */
+.back-btn svg {
+    width: 16px;
+    height: 16px;
+    transition: transform var(--transition-fast);
+}
+
+.back-btn:hover svg {
+    transform: translateX(-3px);
+}

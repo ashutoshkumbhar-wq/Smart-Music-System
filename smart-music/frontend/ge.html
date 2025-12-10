@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Music - Gesture Test (Simple)</title>
+    <!-- The original file linked to camera.css, which is not present here. -->
+    <!-- <link rel="stylesheet" href="camera.css"> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Enable scrolling for the entire page */
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: auto;
+            overflow-x: hidden;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+            background: #010108;
+            color: #e8eaf0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+        }
+        
+        .gesture-test-header {
+            background: #0a0e1a;
+            color: #000000;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 32px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+            border-bottom: 1px solid #010204;
+        }
+        
+        .gesture-test-header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 600;
+            color: #e8eaf0;
+            letter-spacing: -0.02em;
+        }
+        
+        .gesture-test-header p {
+            margin: 8px 0 0 0;
+            font-size: 1.1em;
+            color: #9aa5b8;
+        }
+        
+        /* Main Content */
+        .wrap {
+            min-height: calc(100vh - 220px);
+            padding: 25px;
+            box-sizing: border-box;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 35px;
+            max-width: 1450px;
+            margin: 0 auto;
+        }
+        
+        @media (max-width: 1024px) {
+            .grid {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+        }
+        
+        .card {
+            background: #0a0e1a;
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid #04060c;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+            min-height: 520px;
+        }
+        
+        /* Camera Section */
+        .stage {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .stage-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #1a2340;
+        }
+        
+        .stage-header h2 {
+            margin: 0;
+            color: #e8eaf0;
+            font-size: 1.4em;
+            font-weight: 600;
+        }
+        
+        .live-camera-controls {
+            display: flex;
+            gap: 18px;
+        }
+        
+        .camera-btn {
+            background: #000000;
+            color: #9aa5b8;
+            border: 1px solid #ffffff;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+        }
+        
+        .camera-btn:hover {
+            background: #1a2340;
+            border-color: #2a3550;
+        }
+        
+        .camera-btn.active {
+            background: #2a4cff;
+            color: #fff;
+            border-color: #4060ff;
+        }
+        
+        .camera-btn.off {
+            background: #12182e;
+            color: #6b7789;
+            border-color: #1a2340;
+        }
+        
+        .video-wrap {
+            position: relative;
+            flex: 1;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #010108;
+            min-height: 400px;
+            border: 1px solid #1a2340;
+        }
+        
+        #video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 7px;
+            transform: scaleX(-1);
+        }
+        
+        #overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        .placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #010108;
+            color: #9aa5b8;
+            font-size: 1.1em;
+            border-radius: 7px;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        /* Panel Section */
+        .panel {
+            overflow-y: auto;
+            max-height: 650px;
+        }
+        
+        .gesture-recognition-panel {
+            background: #12182e;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 24px;
+            border: 1px solid #1a2340;
+        }
+        
+        .gesture-recognition-panel h3 {
+            margin: 0 0 16px 0;
+            color: #e8eaf0;
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+        
+        .gesture-display {
+            font-size: 1.1em;
+            font-weight: 500;
+            margin-bottom: 16px;
+            padding: 16px;
+            background: #0a0e1a;
+            border-radius: 6px;
+            text-align: center;
+            color: #e8eaf0;
+            border: 1px solid #1a2340;
+        }
+        
+        .confidence-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #9aa5b8;
+            font-weight: 500;
+            font-size: 0.9em;
+        }
+        
+        .confidence-container {
+            flex: 1;
+            height: 8px;
+            background: #0a0e1a;
+            border-radius: 4px;
+            overflow: hidden;
+            border: 1px solid #1a2340;
+        }
+        
+        .confidence-fill {
+            height: 100%;
+            background: #2a4cff;
+            transition: width 0.3s ease;
+            border-radius: 3px;
+        }
+        
+        .gesture-instructions {
+    background: rgba(1, 0, 7, 0.08);
+    padding: 0px;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 650px;   /* Increased width for horizontal layout */
+    margin: 0 auto;     /* Center horizontally */
+}
+
+.gesture-instructions h3 {
+    margin-bottom: 15px;
+    color: #fff;
+    text-align: center;
+    font-size: 1.2rem;
+}
+
+/* Wider image container */
+.gesture-image-wrapper {
+    width: 100%;
+    height: 220px;          /* Height stays smaller to make it long horizontally */
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #0003;      /* Light subtle background */
+}
+
+/* Fit image perfectly in the horizontal box */
+.gesture-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;     /* Keeps full image visible */
+    display: block;
+}
+
+        
+        /* Controls Section */
+        .section {
+            background: #12182e;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 24px;
+            border: 1px solid #1a2340;
+        }
+        
+        .section h3 {
+            margin-top: 0;
+            color: #e8eaf0;
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+        
+        .row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 16px 0;
+            color: #e8eaf0;
+            font-weight: 500;
+            font-size: 1em;
+        }
+        
+        /* Toggle Switch Styles (for both camera and gesture) */
+        .toggle {
+            position: relative;
+            display: inline-block;
+            width: 52px;
+            height: 28px;
+        }
+        
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .track {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #0a0e1a;
+            transition: all 0.3s ease;
+            border-radius: 28px;
+            border: 1px solid #1a2340;
+        }
+        
+        .track:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 2px;
+            bottom: 2px;
+            background: #e8eaf0;
+            transition: all 0.3s ease;
+            border-radius: 50%;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+        
+        input:checked + .track {
+            background: #2a4cff;
+            border-color: #4060ff;
+        }
+        
+        input:checked + .track:before {
+            transform: translateX(24px);
+            background: #fff;
+        }
+        
+        .track:hover {
+            background: #12182e;
+        }
+        
+        input:checked + .track:hover {
+            background: #4060ff;
+        }
+        
+        /* NEW CODE START: Feature Toggle Switch for Settings */
+        .feature-toggle {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 32px;
+            cursor: pointer;
+        }
+        .feature-toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .toggle-slider {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #12182e; /* Adapted from var(--surface-2) */
+            border: 1px solid #1a2340; /* Adapted from var(--border-subtle) */
+            border-radius: 28px; /* Adapted from var(--radius-full) */
+            transition: all 0.2s ease; /* Adapted from var(--transition-base) */
+        }
+        .toggle-slider::before {
+            content: '';
+            position: absolute;
+            height: 24px;
+            width: 24px;
+            left: 3px;
+            bottom: 3px;
+            background: #9aa5b8; /* Adapted from var(--text-secondary) */
+            border-radius: 50%;
+            transition: all 0.2s ease; /* Adapted from var(--transition-base) */
+        }
+        /* MODIFIED FOR RADIO/SINGLE WINDOW LOGIC */
+        .feature-toggle input:checked + .toggle-slider {
+            background: #2a4cff; /* Use consistent blue */
+            border-color: #4060ff; /* Use consistent blue */
+        }
+        .feature-toggle input:checked + .toggle-slider::before {
+            transform: translateX(28px);
+            background: #fff; /* White thumb */
+        }
+        .feature-toggle:hover .toggle-slider {
+            background: #1a2340; /* Adapted from var(--surface-3) */
+        }
+        .feature-toggle input:checked:hover + .toggle-slider {
+            background: #4060ff; /* Adapted from var(--accent-hover) */
+        }
+
+        /* Mini Windows - Full-size page sections */
+        .mini-window {
+            position: relative;
+            width: 100%;
+            max-width: 100%;
+            height: 90vh;
+            max-height: 95vh;
+            background: #0a0e1a; /* Adapted from var(--surface-1) */
+            border: 1px solid #1a2340; /* Adapted from var(--border-subtle) */
+            border-radius: 12px; /* Adapted from var(--radius-lg) */
+            box-shadow: none;
+            z-index: auto;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease; /* Adapted from var(--transition-smooth) */
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 40px;
+        }
+        .mini-window.active {
+            opacity: 1;
+            pointer-events: all;
+            /* Use a fixed, reasonable max-height for desktop view to make it "mini" */
+            max-height: 700px;
+        }
+        /* Removed the duplicate .mini-window.active block with conflicting max-height */
+        .mini-window-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-bottom: 1px solid #1a2340; /* Adapted from var(--border-subtle) */
+            flex-shrink: 0;
+        }
+        .mini-window-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #e8eaf0; /* Adapted from var(--text-primary) */
+            letter-spacing: -0.3px;
+        }
+        .mini-window-close {
+            background: transparent;
+            border: none;
+            color: #9aa5b8; /* Adapted from var(--text-secondary) */
+            font-size: 1.4em;
+            cursor: pointer;
+            padding: 4px 12px;
+            border-radius: 8px; /* Adapted from var(--radius-md) */
+            transition: all 0.2s ease; /* Adapted from var(--transition-base) */
+            line-height: 1;
+        }
+        .mini-window-close:hover {
+            background: #12182e; /* Adapted from var(--surface-2) */
+            color: #e8eaf0; /* Adapted from var(--text-primary) */
+        }
+        .mini-window-content {
+            flex: 1;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        .mini-window-content iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #010108; /* Adapted from var(--bg-primary) */
+            border-radius: 0;
+        }
+        .windows-container {
+            position: relative;
+            z-index: 1;
+            padding: 30px 30px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        /* NEW CODE END: Feature Toggle Switch for Settings */
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .windows-container { /* NEW CODE */
+                padding: 40px 24px; /* NEW CODE */
+            } /* NEW CODE */
+            .mini-window { /* NEW CODE */
+                height: 90vh; /* Keep the base height consistent */
+                max-height: 95vh; /* Allow it to be taller on small screens */
+            } /* NEW CODE */
+            .mini-window.active { /* NEW CODE */
+                max-height: 95vh; /* Prioritize viewport height on small screens */
+            } /* NEW CODE */
+            /* ... other responsive rules ... */
+            
+            .wrap {
+                padding: 16px;
+            }
+            
+            .card {
+                padding: 16px;
+                min-height: 420px;
+            }
+            
+            .camera-btn {
+                width: 44px;
+                height: 44px;
+            }
+            
+            .toggle {
+                width: 48px;
+                height: 24px;
+            }
+            
+            .track:before {
+                height: 18px;
+                width: 18px;
+            }
+            
+            input:checked + .track:before {
+                transform: translateX(24px);
+            }
+        }
+        
+        /* NEW CODE START: Responsive (Continuation) */
+        @media (max-width: 480px) {
+            .windows-container {
+                padding: 30px 20px;
+            }
+            .mini-window {
+                height: 500px; /* Reduced height on smaller devices */
+            }
+            .mini-window.active {
+                max-height: 600px; /* A safe max-height on very small screens */
+            }
+        }
+        /* NEW CODE END: Responsive (Continuation) */
+        
+        /* Scrollbar Styling - Professional */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #0a0e1a;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #1a2340;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #2a3550;
+        }
+        
+        /* Selection styling */
+        ::selection {
+            background: rgba(42, 76, 255, 0.3);
+            color: #e8eaf0;
+        }
+        
+        ::-moz-selection {
+            background: rgba(42, 76, 255, 0.3);
+            color: #e8eaf0;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="gesture-test-header">
+    <h1>Smart Music Gesture Test</h1>
+    <p>Test your trained gesture recognition model with Spotify integration</p>
+</div>
+
+<!-- Back Button -->
+<div style="padding: 0 32px 16px 32px;">
+    <button 
+        onclick="window.location.href='index.html'" 
+        style="
+            background: #12182e; color: #e8eaf0; border: 1px solid #1a2340; padding: 8px 16px; border-radius: 9999px; font-weight: 500; font-size: 0.9em; cursor: pointer; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 8px; font-family: sans-serif;"
+        
+        onmouseover="this.style.background='#1a2340'; this.style.borderColor='#2a3550'"
+        onmouseout="this.style.background='#12182e'; this.style.borderColor='#1a2340'"
+    >
+        ← Back
+    </button>
+</div>
+
+<!-- Main Content -->
+<main class="wrap">
+    <section class="grid">
+        <!-- Left: Camera -->
+        <div class="card stage">
+            <div class="stage-header">
+                <h2>Live Camera Feed</h2>
+            </div>
+
+            <div class="video-wrap" id="videoWrap">
+                <video id="video" autoplay playsinline></video>
+                <canvas id="overlay"></canvas> 
+                <div class="placeholder" id="placeholder">
+                    📷 Camera is off<br>Click camera button to start
+                </div>
+            </div>
+        </div>
+
+        <!-- Right: Controls -->
+        <div class="card panel">
+            <!-- Gesture Recognition Display -->
+            <div class="gesture-recognition-panel">
+                <h3>🎭 Current Gesture</h3>
+                <div id="currentGesture" class="gesture-display">No gesture detected</div>
+                <div class="confidence-bar">
+                    <span>Confidence:</span>
+                    <div class="confidence-container">
+                        <div class="confidence-fill" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div id="gestureStatus" style="margin-top: 8px; font-size: 0.85em; color: #9aa5b8; text-align: center;"></div>
+            </div>
+            
+            <!-- Emotion Recognition Display -->
+            <div class="gesture-recognition-panel">
+                <h3>😊 Current Emotion</h3>
+                <div id="currentEmotion" class="gesture-display">No face detected</div>
+                <div style="margin-top: 12px;">
+                    <div style="display: flex; align-items: center; margin-bottom: 6px; font-size: 0.85em;">
+                        <span style="width: 60px; color: #888;">Neutral:</span>
+                        <div style="flex: 1; height: 6px; background: #0a0e1a; border-radius: 3px; overflow: hidden; border: 1px solid #1a2340;">
+                            <div id="neutralBar" style="height: 100%; background: #888; width: 0%"></div>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; margin-bottom: 6px; font-size: 0.85em;">
+                        <span style="width: 60px; color: #888;">Happy:</span>
+                        <div style="flex: 1; height: 6px; background: #0a0e1a; border-radius: 3px; overflow: hidden; border: 1px solid #1a2340;">
+                            <div id="happyBar" style="height: 100%; background: #4CAF50; width: 0%"></div>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; font-size: 0.85em;">
+                        <span style="width: 60px; color: #888;">Sad:</span>
+                        <div style="flex: 1; height: 6px; background: #0a0e1a; border-radius: 3px; overflow: hidden; border: 1px solid #1a2340;">
+                            <div id="sadBar" style="height: 100%; background: #2196F3; width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Gesture Instructions -->
+            <div class="gesture-instructions">
+    
+
+    <!-- Single Image Display -->
+    <div class="gesture-image-wrapper">
+        <img src="hand1.png" alt="Gesture Instructions" class="gesture-image">
+    </div>
+</div>
+
+            
+            <!-- Controls -->
+            <div class="section">
+                <h3>⚙️ Controls</h3>
+                <div class="row">
+                    <strong>📹 Camera</strong>
+                    <label class="toggle">
+                        <input type="checkbox" id="cameraToggle">
+                        <span class="track"></span>
+                    </label>
+                </div>
+                <div class="row">
+                    <strong>🎭 Gesture Recognition</strong>
+                    <label class="toggle">
+                        <input type="checkbox" id="gestureToggle" checked>
+                        <span class="track"></span>
+                    </label>
+                </div>
+                <div class="row">
+                    <strong>😊 Emotion Detection</strong>
+                    <label class="toggle">
+                        <input type="checkbox" id="emotionToggle" checked>
+                        <span class="track"></span>
+                    </label>
+                </div>
+                <div class="row" style="margin-top: 24px; padding-top: 24px; border-top: 1px solid #1a2340;">
+                    <strong>🎨 Style Radio </strong>
+                    <label class="feature-toggle">
+                        <input type="radio" id="artistMixThrottle" name="musicFeature" value="artistMix">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="row">
+                    <strong>🎵 Mood Radio</strong>
+                    <label class="feature-toggle">
+                        <input type="radio" id="moodMixerToggle" name="musicFeature" value="moodMixer">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="row">
+                    <strong>💡 Recommendation Model </strong>
+                    <label class="feature-toggle">
+                        <input type="radio" id="finaRecomToggle" name="musicFeature" value="finaRecom">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<div class="windows-container">
+    <div id="singleFeatureWindow" class="mini-window">
+        <div class="mini-window-header">
+            <span id="miniWindowTitle" class="mini-window-title"></span>
+            <button class="mini-window-close" onclick="closeSingleFeatureWindow()">✕</button>
+        </div>
+        <div class="mini-window-content">
+            <iframe id="featureIframe" src="" frameborder="0"></iframe>
+        </div>
+    </div>
+</div>
+<script>
+// Entire JS remains exactly the same as your original code
+let stream = null;
+let isGestureRecognitionActive = true;
+let isEmotionRecognitionActive = true;
+let gestureRecognitionInterval = null;
+let isSpotifyAuthenticated = false;
+const BACKEND_URL = 'http://localhost:3000';
+
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('🎭 Gesture Test Page Loaded');
+    
+    const video = document.getElementById('video');
+    const overlay = document.getElementById('overlay');
+    const ctx = overlay ? overlay.getContext('2d') : null;
+    const toggleCamBtn = document.getElementById('toggleCamBtn');
+    const cameraToggle = document.getElementById('cameraToggle');
+    const gestureToggle = document.getElementById('gestureToggle');
+    const emotionToggle = document.getElementById('emotionToggle');
+    const placeholder = document.getElementById('placeholder');
+    
+    if (gestureToggle) {
+        gestureToggle.checked = true;
+        isGestureRecognitionActive = true;
+    }
+    
+    if (emotionToggle) {
+        emotionToggle.checked = true;
+        isEmotionRecognitionActive = true;
+    }
+    
+    async function checkBackendConnection() {
+        try {
+            const response = await fetch(`${BACKEND_URL}/api/health`);
+            const data = await response.json();
+            console.log('✅ Backend connected');
+            const spotifyResponse = await fetch(`${BACKEND_URL}/api/spotify/status`);
+            const spotifyData = await spotifyResponse.json();
+            isSpotifyAuthenticated = spotifyData.authenticated;
+            if (spotifyData.authenticated) console.log('✅ Connected to Spotify');
+        } catch (error) {
+            console.error('❌ Backend connection failed:', error);
+        }
+    }
+    
+    async function startOrchestrator() {
+        try {
+            const statusResponse = await fetch(`${BACKEND_URL}/api/orchestrator/status`);
+            const status = await statusResponse.json();
+            
+            if (status.running) {
+                console.log('✅ Orchestrator already running');
+                return;
+            }
+            
+            const startResponse = await fetch(`${BACKEND_URL}/api/orchestrator/start`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            const result = await startResponse.json();
+            
+            if (result.ok) {
+                console.log('✅ Orchestrator started automatically');
+            } else {
+                console.warn('⚠️ Could not start orchestrator:', result.error);
+            }
+        } catch (error) {
+            console.error('❌ Failed to start orchestrator:', error);
+        }
+    }
+    
+    checkBackendConnection();
+    startOrchestrator();
+
+    async function startCamera() {
+        try {
+            stream = await navigator.mediaDevices.getUserMedia({ 
+                video: { width: { ideal: 1280 }, height: { ideal: 720 } }, 
+                audio: false 
+            });
+            video.srcObject = stream;
+            placeholder.style.display = "none";
+            // Note: The original code referenced toggleCamBtn which is not in the HTML, 
+            // but the logic relies on cameraToggle now. I'm keeping the original JS structure.
+            // if (toggleCamBtn) { toggleCamBtn.classList.add("active"); toggleCamBtn.classList.remove("off"); }
+            if (cameraToggle) cameraToggle.checked = true;
+            video.onloadedmetadata = () => { resizeCanvas(); if (ctx) requestAnimationFrame(drawOverlay); };
+            if (isGestureRecognitionActive) startGestureRecognition();
+        } catch (err) {
+            alert(`Error accessing camera: ${err.message}`);
+        }
+    }
+
+    function stopCamera() {
+        if (stream) { stream.getTracks().forEach(track => track.stop()); stream = null; }
+        video.srcObject = null;
+        placeholder.style.display = "flex";
+        // Note: keeping original JS structure.
+        // if (toggleCamBtn) { toggleCamBtn.classList.remove("active"); toggleCamBtn.classList.add("off"); }
+        if (cameraToggle) cameraToggle.checked = false;
+        stopGestureRecognition();
+    }
+
+    function resizeCanvas() {
+        if (!overlay || !video) return;
+        const rect = video.getBoundingClientRect();
+        overlay.width = rect.width * devicePixelRatio;
+        overlay.height = rect.height * devicePixelRatio;
+        overlay.style.width = rect.width + "px";
+        overlay.style.height = rect.height + "px";
+        if (ctx) ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+    }
+
+    function drawOverlay() { 
+        if (!ctx) return; 
+        ctx.clearRect(0, 0, overlay.width, overlay.height); 
+        requestAnimationFrame(drawOverlay); 
+    }
+
+    async function predictGesture() {
+        if (!video.srcObject || !video.videoWidth || !video.videoHeight) return;
+        if (!isGestureRecognitionActive) return; // Don't predict if gesture recognition is disabled
+        
+        // Optimized: Reuse canvas to reduce memory allocation
+        let canvas = document.getElementById('gestureCanvas');
+        if (!canvas) {
+            canvas = document.createElement('canvas');
+            canvas.id = 'gestureCanvas';
+            canvas.style.display = 'none';
+            document.body.appendChild(canvas);
+        }
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        const ctx2 = canvas.getContext('2d');
+        ctx2.drawImage(video, 0, 0);
+        const imageData = canvas.toDataURL('image/jpeg', 0.7); // Slightly lower quality for better performance
+        try {
+            const response = await fetch(`${BACKEND_URL}/api/detect/all`, { 
+                method:'POST', 
+                headers:{ 'Content-Type':'application/json'}, 
+                body:JSON.stringify({ image: imageData }) 
+            });
+            
+            if (response.ok) { 
+                const result = await response.json(); 
+                
+                // Use raw gesture data if available (for display), but check threshold for actions
+                let gestureData = result.gesture || {gesture: 'none', confidence: 0};
+                
+                // If gesture was filtered but we have raw data, use it for display
+                if (gestureData.raw_gesture && gestureData.gesture === 'none' && gestureData.raw_confidence > 0) {
+                    // Show raw gesture in display (with indicator it's below threshold)
+                    gestureData = {
+                        gesture: gestureData.raw_gesture,
+                        confidence: gestureData.raw_confidence,
+                        below_threshold: true,
+                        threshold: gestureData.threshold || 0.8
+                    };
+                    console.log(`🔍 Gesture detected but below threshold: ${gestureData.gesture} (${(gestureData.confidence*100).toFixed(1)}% < ${(gestureData.threshold*100).toFixed(0)}%)`);
+                } else if (gestureData.gesture !== 'none') {
+                    console.log('✅ Gesture detected:', gestureData.gesture, 'Confidence:', (gestureData.confidence*100).toFixed(1) + '%');
+                }
+                
+                // Update displays (will show raw gesture even if below threshold)
+                updateGestureDisplay(gestureData); 
+                updateEmotionDisplay(result.emotion || {neutral: 1.0, happy: 0, sad: 0, detected: false});
+                
+                // Execute Spotify action only if gesture is above threshold (0.3 minimum for actions)
+                const actionConfidence = gestureData.below_threshold ? 0 : gestureData.confidence;
+                if (gestureData.gesture && 
+                    gestureData.gesture !== 'none' && 
+                    !gestureData.below_threshold &&
+                    actionConfidence >= 0.3) {
+                    await executeSpotifyAction(gestureData.gesture);
+                }
+            } else {
+                // Log error response
+                const errorText = await response.text();
+                console.error('❌ Backend error:', response.status, response.statusText, errorText);
+            }
+        } catch(e) { 
+            console.error('❌ Gesture prediction error:', e); 
+        }
+    }
+
+    async function executeSpotifyAction(gesture) {
+        if (!isSpotifyAuthenticated) return;
+        const gestureActions = { 
+            'play_right': {action:'play'}, 
+            'pause_right': {action:'pause'}, 
+            'next_right': {action:'next'}, 
+            'previous_right': {action:'previous'}, 
+            'volume_up_left': {action:'volume', delta:10}, 
+            'volume_down_left': {action:'volume', delta:-10}, 
+            'like_left': {action:'like'}, 
+            'skip30_left': {action:'seek', delta:30000} 
+        };
+        const action = gestureActions[gesture]; 
+        if (!action) return;
+        try { 
+            const response = await fetch(`${BACKEND_URL}/api/spotify/control`, { 
+                method:'POST', 
+                headers:{ 'Content-Type':'application/json'}, 
+                body:JSON.stringify(action) 
+            }); 
+            const result = await response.json(); 
+            showGestureFeedback(gesture, result.ok); 
+        } catch(e) { 
+            showGestureFeedback(gesture,false); 
+        }
+    }
+
+    function showGestureFeedback(gesture, success) {
+        const feedback = document.createElement('div'); 
+        feedback.className = `gesture-feedback`; 
+        feedback.textContent = `${success?'✅':'❌'} ${gesture}`;
+        feedback.style.cssText = `
+            position: fixed; top:50%; left:50%; 
+            transform: translate(-50%, -50%); 
+            background: ${success?'linear-gradient(135deg, #3030ff, #5050ff)':'linear-gradient(135deg, #e74c3c, #c0392b)'}; 
+            color: white; padding:25px 35px; border-radius:35px; 
+            font-weight:bold; font-size:1.3em; z-index:10000; 
+            pointer-events:none; animation: gestureFeedback 2.5s ease-out forwards; 
+            box-shadow:0 20px 50px ${success?'rgba(48,48,255,0.6)':'rgba(231,76,60,0.6)'}; 
+            backdrop-filter: blur(15px); 
+            border:1px solid ${success?'rgba(80,80,255,0.3)':'rgba(231,76,60,0.3)'};`;
+        document.body.appendChild(feedback); 
+        setTimeout(()=>{feedback.remove();},2500);
+    }
+
+    function updateGestureDisplay(result) {
+        const gestureElements = document.querySelectorAll('#currentGesture');
+        const confidenceFills = document.querySelectorAll('.confidence-fill');
+        
+        // Handle both old format (result.gesture is string) and new format (result.gesture is object)
+        let gestureName = 'none';
+        let confidence = 0;
+        let belowThreshold = false;
+        let threshold = 0.8;
+        
+        if (typeof result === 'string') {
+            // Old format: result is just the gesture name string
+            gestureName = result;
+            confidence = 0;
+        } else if (result && typeof result === 'object') {
+            // New format: result is an object with gesture and confidence
+            gestureName = result.gesture || result.raw_gesture || 'none';
+            confidence = result.confidence || result.raw_confidence || 0;
+            belowThreshold = result.below_threshold || false;
+            threshold = result.threshold || 0.8;
+        }
+        
+        // Update status indicator
+        const statusEl = document.getElementById('gestureStatus');
+        
+        gestureElements.forEach(el=>{
+            if (!gestureName || gestureName==='none' || confidence === 0){
+                el.textContent='No gesture detected'; 
+                el.style.color='#666';
+                if (statusEl) statusEl.textContent = '';
+            } else {
+                // Show gesture name and confidence
+                let displayText = `${gestureName} (${(confidence*100).toFixed(1)}%)`;
+                el.textContent = displayText;
+                
+                // Color coding: blue (high), yellow (medium), orange (low), red (very low/below threshold)
+                if (belowThreshold) {
+                    el.style.color = '#e74c3c'; // Red for below threshold
+                    if (statusEl) {
+                        statusEl.textContent = `⚠️ Below ${(threshold*100).toFixed(0)}% threshold - Lower threshold in backend config`;
+                        statusEl.style.color = '#e74c3c';
+                    }
+                } else {
+                    el.style.color = confidence > 0.8 ? '#5050ff' :
+                                      confidence > 0.6 ? '#7070ff' :
+                                      confidence > 0.3 ? '#f39c12' : '#e74c3c';
+                    if (statusEl) {
+                        statusEl.textContent = '✅ Gesture detected and active';
+                        statusEl.style.color = '#4CAF50';
+                    }
+                }
+            }
+        });
+        
+        confidenceFills.forEach(fill=>{
+            const p = Math.max(0, Math.min(100, confidence * 100)); 
+            fill.style.width = p + '%'; 
+            
+            // Color gradient based on confidence and threshold status
+            if (belowThreshold) {
+                fill.style.background = 'linear-gradient(90deg,#e74c3c,#c0392b)'; // Red for below threshold
+            } else {
+                fill.style.background = confidence > 0.8 ?
+                    'linear-gradient(90deg,#3030ff,#5050ff)' :
+                    confidence > 0.6 ?
+                    'linear-gradient(90deg,#f39c12,#7070ff)' :
+                    confidence > 0.3 ?
+                    'linear-gradient(90deg,#f39c12,#ff9800)' :
+                    'linear-gradient(90deg,#e74c3c,#f39c12)';
+            }
+        });
+    }
+
+    function updateEmotionDisplay(emotionData) {
+        const emotionEl = document.getElementById('currentEmotion');
+        const neutralBar = document.getElementById('neutralBar');
+        const happyBar = document.getElementById('happyBar');
+        const sadBar = document.getElementById('sadBar');
+        
+        if (emotionEl) {
+            if (emotionData.detected) {
+                const dominant = Math.max(emotionData.neutral, emotionData.happy, emotionData.sad);
+                let dominantEmotion = 'neutral';
+                if (emotionData.happy === dominant) dominantEmotion = 'happy';
+                else if (emotionData.sad === dominant) dominantEmotion = 'sad';
+                
+                emotionEl.textContent = `Feeling: ${dominantEmotion} (${(dominant * 100).toFixed(0)}%)`;
+                emotionEl.style.color = dominantEmotion === 'happy' ? '#4CAF50' : 
+                                        dominantEmotion === 'sad' ? '#2196F3' : '#888';
+            } else {
+                emotionEl.textContent = 'No face detected';
+                emotionEl.style.color = '#666';
+            }
+        }
+        
+        if (neutralBar) neutralBar.style.width = `${(emotionData.neutral || 0) * 100}%`;
+        if (happyBar) happyBar.style.width = `${(emotionData.happy || 0) * 100}%`;
+        if (sadBar) sadBar.style.width = `${(emotionData.sad || 0) * 100}%`;
+    }
+
+    function startGestureRecognition(){ 
+        if(gestureRecognitionInterval) return; 
+        // Optimized: Check if video is ready before starting
+        if (!video.videoWidth || !video.videoHeight) {
+            console.warn('⚠️ Video not ready, waiting...');
+            setTimeout(startGestureRecognition, 100);
+            return;
+        }
+        // Optimized: Adaptive interval based on performance
+        const interval = 500; // 500ms = 2 FPS detection (good balance)
+        gestureRecognitionInterval=setInterval(predictGesture, interval); 
+        console.log(`✅ Gesture recognition started (${interval}ms interval)`);
+    }
+    function stopGestureRecognition(){ 
+        if(gestureRecognitionInterval){ 
+            clearInterval(gestureRecognitionInterval); 
+            gestureRecognitionInterval=null; 
+        } 
+    }
+
+    if(toggleCamBtn) toggleCamBtn.addEventListener('click',()=>{ stream?stopCamera():startCamera(); });
+    if(cameraToggle) cameraToggle.addEventListener('change',()=>{ cameraToggle.checked?startCamera():stopCamera(); });
+    if(gestureToggle) gestureToggle.addEventListener('change',()=>{ 
+        isGestureRecognitionActive=gestureToggle.checked; 
+        if(isGestureRecognitionActive && stream) startGestureRecognition(); 
+        else stopGestureRecognition(); 
+    });
+    if(emotionToggle) emotionToggle.addEventListener('change',()=>{ 
+        isEmotionRecognitionActive=emotionToggle.checked; 
+    });
+    
+    // NEW CODE START: Single Window Logic Replacement
+    const featureToggles = document.querySelectorAll('input[name="musicFeature"]');
+    const singleFeatureWindow = document.getElementById('singleFeatureWindow');
+    const featureIframe = document.getElementById('featureIframe');
+    const miniWindowTitle = document.getElementById('miniWindowTitle');
+    
+    // Feature Configuration Map: Defines the title and source for each radio button's value.
+    const featureConfig = {
+        artistMix: {
+            title: '🎨 Style Radio',
+            src: 'Cards/artist/index.html'
+        },
+        moodMixer: {
+            title: '🎵 Mood Radio',
+            src: 'mood2/index.html'
+        },
+        finaRecom: {
+            title: '💡 Recommendation Model',
+            src: 'Fina/index.html'
+        }
+    };
+    
+    // Function to open the single feature window and load content
+    window.openSingleFeatureWindow = function(featureKey) {
+        const config = featureConfig[featureKey];
+        if (singleFeatureWindow && featureIframe && miniWindowTitle && config) {
+            miniWindowTitle.textContent = config.title; // Set dynamic title
+            featureIframe.src = config.src;           // Set dynamic content source
+            singleFeatureWindow.classList.add('active');
+            
+            // Adjust padding and scroll to the window
+            document.body.style.paddingBottom = "800px";
+            setTimeout(() => {
+                singleFeatureWindow.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 150);
+        }
+    }
+    
+    // Function to close the single feature window (called by the '✕' button)
+    window.closeSingleFeatureWindow = function() {
+        if (singleFeatureWindow) {
+            singleFeatureWindow.classList.remove('active');
+            document.body.style.paddingBottom = "0px";
+            
+            // Uncheck the active radio button when closing the window
+            featureToggles.forEach(toggle => {
+                if (toggle.checked) {
+                    toggle.checked = false;
+                }
+            });
+        }
+        if (featureIframe) {
+            // Clear the iframe src to stop the content from running/loading
+            featureIframe.src = 'about:blank'; 
+        }
+    }
+
+    // Event listeners for the radio buttons
+    featureToggles.forEach(toggle => {
+        toggle.addEventListener('change', function() {
+            if (this.checked) {
+                // The 'value' attribute of the radio button (e.g., 'artistMix') determines the feature
+                window.openSingleFeatureWindow(this.value);
+            }
+        });
+    });
+
+    // We add a listener to allow clicking on an active radio button to close the window.
+    featureToggles.forEach(toggle => {
+        toggle.addEventListener('mousedown', function(e) {
+            // Check if the toggle is currently checked
+            if (this.checked) {
+                e.preventDefault(); // Stop the default radio behavior
+                window.closeSingleFeatureWindow(); // Close the window
+            }
+        });
+    });
+
+    // Handle initial state: if one is checked on load, open the window
+    featureToggles.forEach(toggle => {
+        if (toggle.checked) {
+            window.openSingleFeatureWindow(toggle.value);
+        }
+    });
+    // NEW CODE END: Single Window Logic Replacement
+    
+    window.addEventListener('resize', resizeCanvas);
+
+    const style=document.createElement('style'); 
+    style.textContent='@keyframes gestureFeedback{0%{opacity:0;transform:translate(-50%,-50%) scale(0.3);}15%{opacity:1;transform:translate(-50%,-50%) scale(1.1);}85%{opacity:1;transform:translate(-50%,-50%) scale(1);}100%{opacity:0;transform:translate(-50%,-50%) scale(0.8);}}'; 
+    document.head.appendChild(style);
+});
+
+// NEW CODE START: Global Mini-Window Functions - ALL REMOVED/REPLACED by closeSingleFeatureWindow
+// Original code for openArtistMix, closeArtistMix, openMoodMixer, closeMoodMixer, openFinaRecom, and closeFinaRecom is now obsolete and has been removed.
+// The new logic is implemented within the DOMContentLoaded listener and the global closeSingleFeatureWindow function.
+// NEW CODE END: Global Mini-Window Functions
+</script>
+
+
+</body>
+</html>

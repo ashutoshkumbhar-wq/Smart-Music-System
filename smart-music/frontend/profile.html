@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Spotify Connect</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="profile.css">
+</head>
+<body>
+
+  <!-- Floating Images Background -->
+  <div class="floating-notes" id="notes"></div>
+
+  <!-- Back Button -->
+  <button class="back-btn" onclick="goBack()">⟵ Back</button>
+
+  <!-- Info Button -->
+  <button class="settings-btn" onclick="openConfig()">⚙</button>
+
+  <div class="container">
+    <h1>Connect to Spotify</h1>
+    <p>Grant access to control playback, view your music history, and personalize your experience.</p>
+    <button class="spotify-btn" onclick="loginWithSpotify()">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg" alt="Spotify">
+      Connect with Spotify
+    </button>
+    <div id="auth-status" style="margin-top:16px; opacity:0.9;"></div>
+    <div id="user-info" style="margin-top:10px;"></div>
+    <button id="disconnectBtn" class="spotify-btn" style="display:none; background:#e84545" onclick="disconnectSpotify()">Disconnect</button>
+      </div>
+    </div>
+    
+    <!-- Current Track Display -->
+    <div class="current-track-section" id="current-track-section" style="margin-top: 20px; padding: 20px; background: rgba(255,255,255,0.05); border-radius: 15px; display: none;">
+      <h3>Currently Playing</h3>
+      <div class="track-display">
+        <img id="current-track-art" src="" alt="Album Art" class="track-art-large">
+        <div class="track-details">
+          <div id="current-track-title" class="track-title-large">No track playing</div>
+          <div id="current-track-artist" class="track-artist-large"></div>
+          <div class="track-progress">
+            <div class="progress-bar-large" id="progress-bar-large"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Config Modal -->
+  <div class="info-modal" id="configModal">
+    <div class="info-content">
+      <span class="close" onclick="closeConfig()">&times;</span>
+      <h2>Spotify Settings</h2>
+      <p>Enter your Spotify App details. We do not store secrets. The Client ID is not a secret.</p>
+      <div style="display:flex; flex-direction:column; gap:10px; margin-top:10px;">
+        <label>
+          Client ID
+          <input id="cfgClientId" type="text" placeholder="Paste your Spotify Client ID" style="width:100%; padding:8px; border-radius:8px; border:none; margin-top:6px;">
+        </label>
+        <label>
+          Redirect URI
+          <input id="cfgRedirectUri" type="text" placeholder="e.g. http://localhost:5500/frontend/profile.html" style="width:100%; padding:8px; border-radius:8px; border:none; margin-top:6px;">
+        </label>
+        <label style="display:flex; align-items:center; gap:8px; margin-top:6px;">
+          <input id="cfgUseImplicit" type="checkbox" checked>
+          Use Implicit Grant (no backend required)
+        </label>
+        <button class="spotify-btn" onclick="saveConfig()">Save</button>
+      </div>
+      <p style="margin-top:12px; font-size:0.9em; opacity:0.85;">Tip: You can also create a <code>spotify.config.json</code> file next to this page with { "clientId": "...", "redirectUri": "..." }.</p>
+    </div>
+  </div>
+
+  <script src="profile.js"></script>
+  <script src="unified-gesture-controller.js"></script>
+  <script>
+    // Initialize unified gesture controls for profile page
+    document.addEventListener('DOMContentLoaded', () => {
+      // Initialize unified gesture controller
+      window.gestureController = new UnifiedGestureController({
+        backendUrl: 'http://localhost:3000',
+        enableTouchGestures: false, // Start disabled on profile page
+        enableCameraGestures: false,
+        gestureThreshold: 0.3,
+        cooldownMs: 300 // Reduced for faster gesture response
+      });
+      
+      // Profile page specific gesture toggles
+      const toggleGestures = document.getElementById('toggle-gestures-profile');
+      const toggleCamera = document.getElementById('toggle-camera-profile');
+      
+      if (toggleGestures) {
+        toggleGestures.addEventListener('click', () => {
+          const isEnabled = window.gestureController.options.enableTouchGestures;
+          window.gestureController.options.enableTouchGestures = !isEnabled;
+          toggleGestures.classList.toggle('active', !isEnabled);
+          toggleGestures.innerHTML = `<i class="fas fa-hand-paper"></i><span>${!isEnabled ? 'Disable' : 'Enable'} Touch Gestures</span>`;
+          console.log('Touch gestures', !isEnabled ? 'enabled' : 'disabled');
+        });
+      }
+      
+      if (toggleCamera) {
+        toggleCamera.addEventListener('click', async () => {
+          const isEnabled = window.gestureController.options.enableCameraGestures;
+          window.gestureController.options.enableCameraGestures = !isEnabled;
+          toggleCamera.classList.toggle('active', !isEnabled);
+          toggleCamera.innerHTML = `<i class="fas fa-video"></i><span>${!isEnabled ? 'Disable' : 'Enable'} Camera Gestures</span>`;
+          
+          if (!isEnabled) {
+            await window.gestureController.initCameraGestures();
+          } else {
+            if (window.gestureController.gestureRecognition) {
+              window.gestureController.gestureRecognition.destroy();
+            }
+          }
+          
+          console.log('Camera gestures', !isEnabled ? 'enabled' : 'disabled');
+        });
+      }
+    });
+  </script>
+</body>
+</html>

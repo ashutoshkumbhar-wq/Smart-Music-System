@@ -1,0 +1,17 @@
+/* Using a custom font */
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+/* Custom styles for the spotlight effect */
+.spotlight {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 300px;
+    height: 120%;
+    background: linear-gradient(to bottom, rgba(255, 255, 240, 0.35), transparent);
+    /* This creates the trapezoid shape for the light beam */
+    clip-path: polygon(30% 0, 70% 0, 100% 100%, 0% 100%);
+    pointer-events: none; /* Make sure spotlights don't interfere with clicks */
+}

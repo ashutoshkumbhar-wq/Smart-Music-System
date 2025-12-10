@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotify Mood Mixer</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <div class="navbar-left">
+                <button class="nav-btn back-btn" id="backBtn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7"/>
+                    </svg>
+                    Back
+                </button>
+                <div class="app-logo">
+                    <h1 class="app-title">Mood Radio</h1>
+                </div>
+            </div>
+            <div class="navbar-right">
+                <div class="language-selector">
+                    <label for="languageSelect" class="lang-label">Language:</label>
+                    <select id="languageSelect" class="form-control lang-select">
+                        <option value="">Select Language</option>
+                        <option value="hi">Hindi</option>
+                        <option value="en">English</option>
+                        <option value="both">Bilingual</option>
+                    </select>
+                </div>
+                <button class="nav-btn" id="resetBtn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M1 4v6h6"></path>
+                        <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                    </svg>
+                    Reset All
+                </button>
+                <button class="nav-btn primary" id="generateBtn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                    </svg>
+                    Mix It
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <main class="hero-section">
+        <h1 class="hero-title">Mix Your Perfect Playlist</h1>
+        <p class="hero-subtitle">Select your mood percentages and discover personalized Spotify playlists</p>
+        
+        <div class="hero-stats">
+            <div class="stat-item">
+                <div class="stat-number" id="totalPercentage">0%</div>
+                <div class="stat-label">Total</div>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+                <div class="stat-number" id="activeMoods">0</div>
+                <div class="stat-label">Active Moods</div>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+                <div class="stat-number" id="songLanguage">Not Set</div>
+                <div class="stat-label">Language</div>
+            </div>
+        </div>
+    </main>
+
+    <!-- MOOD GRID -->
+    <section class="mood-grid">
+        <!-- Happy -->
+        <div class="mood-card" data-mood="happy">
+            <div class="mood-card-glow"></div>
+            <div class="mood-card-header">
+                <div class="mood-icon">😊</div>
+                <div class="mood-details">
+                    <h3 class="mood-title">Happy</h3>
+                    <div class="mood-value">
+                        <span class="value-number">0</span>
+                        <span class="value-percent">%</span>
+                    </div>
+                </div>
+                <button class="lock-toggle" data-lock="happy">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <circle cx="12" cy="16" r="1"></circle>
+                        <path d="m7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="slider-container">
+                <input type="range" id="happy" class="mood-slider" min="0" max="100" value="0" step="5">
+                <div class="slider-fill"></div>
+            </div>
+        </div>
+
+        <!-- Sad -->
+        <div class="mood-card" data-mood="sad">
+            <div class="mood-card-glow"></div>
+            <div class="mood-card-header">
+                <div class="mood-icon">😢</div>
+                <div class="mood-details">
+                    <h3 class="mood-title">Sad</h3>
+                    <div class="mood-value">
+                        <span class="value-number">0</span>
+                        <span class="value-percent">%</span>
+                    </div>
+                </div>
+                <button class="lock-toggle" data-lock="sad">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <circle cx="12" cy="16" r="1"></circle>
+                        <path d="m7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="slider-container">
+                <input type="range" id="sad" class="mood-slider" min="0" max="100" value="0" step="5">
+                <div class="slider-fill"></div>
+            </div>
+        </div>
+
+        <!-- Motivational -->
+        <div class="mood-card" data-mood="motivational">
+            <div class="mood-card-glow"></div>
+            <div class="mood-card-header">
+                <div class="mood-icon">💪</div>
+                <div class="mood-details">
+                    <h3 class="mood-title">Motivational</h3>
+                    <div class="mood-value">
+                        <span class="value-number">0</span>
+                        <span class="value-percent">%</span>
+                    </div>
+                </div>
+                <button class="lock-toggle" data-lock="motivational">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <circle cx="12" cy="16" r="1"></circle>
+                        <path d="m7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="slider-container">
+                <input type="range" id="motivational" class="mood-slider" min="0" max="100" value="0" step="5">
+                <div class="slider-fill"></div>
+            </div>
+        </div>
+
+        <!-- Chill -->
+        <div class="mood-card" data-mood="chill">
+            <div class="mood-card-glow"></div>
+            <div class="mood-card-header">
+                <div class="mood-icon">😌</div>
+                <div class="mood-details">
+                    <h3 class="mood-title">Chill</h3>
+                    <div class="mood-value">
+                        <span class="value-number">0</span>
+                        <span class="value-percent">%</span>
+                    </div>
+                </div>
+                <button class="lock-toggle" data-lock="chill">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <circle cx="12" cy="16" r="1"></circle>
+                        <path d="m7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="slider-container">
+                <input type="range" id="chill" class="mood-slider" min="0" max="100" value="0" step="5">
+                <div class="slider-fill"></div>
+            </div>
+        </div>
+
+        <!-- Hip Hop -->
+        <div class="mood-card" data-mood="hiphop">
+            <div class="mood-card-glow"></div>
+            <div class="mood-card-header">
+                <div class="mood-icon">🎤</div>
+                <div class="mood-details">
+                    <h3 class="mood-title">Hip Hop</h3>
+                    <div class="mood-value">
+                        <span class="value-number">0</span>
+                        <span class="value-percent">%</span>
+                    </div>
+                </div>
+                <button class="lock-toggle" data-lock="hiphop">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <circle cx="12" cy="16" r="1"></circle>
+                        <path d="m7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="slider-container">
+                <input type="range" id="hiphop" class="mood-slider" min="0" max="100" value="0" step="5">
+                <div class="slider-fill"></div>
+            </div>
+        </div>
+
+        <!-- Rap -->
+        <div class="mood-card" data-mood="rap">
+            <div class="mood-card-glow"></div>
+            <div class="mood-card-header">
+                <div class="mood-icon">🎵</div>
+                <div class="mood-details">
+                    <h3 class="mood-title">Rap</h3>
+                    <div class="mood-value">
+                        <span class="value-number">0</span>
+                        <span class="value-percent">%</span>
+                    </div>
+                </div>
+                <button class="lock-toggle" data-lock="rap">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <circle cx="12" cy="16" r="1"></circle>
+                        <path d="m7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="slider-container">
+                <input type="range" id="rap" class="mood-slider" min="0" max="100" value="0" step="5">
+                <div class="slider-fill"></div>
+            </div>
+        </div>
+
+        <!-- Old -->
+        <div class="mood-card" data-mood="old">
+            <div class="mood-card-glow"></div>
+            <div class="mood-card-header">
+                <div class="mood-icon">📻</div>
+                <div class="mood-details">
+                    <h3 class="mood-title">Old</h3>
+                    <div class="mood-value">
+                        <span class="value-number">0</span>
+                        <span class="value-percent">%</span>
+                    </div>
+                </div>
+                <button class="lock-toggle" data-lock="old">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <circle cx="12" cy="16" r="1"></circle>
+                        <path d="m7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="slider-container">
+                <input type="range" id="old" class="mood-slider" min="0" max="100" value="0" step="5">
+                <div class="slider-fill"></div>
+            </div>
+        </div>
+
+        <!-- Romantic -->
+        <div class="mood-card" data-mood="romantic">
+            <div class="mood-card-glow"></div>
+            <div class="mood-card-header">
+                <div class="mood-icon">💕</div>
+                <div class="mood-details">
+                    <h3 class="mood-title">Romantic</h3>
+                    <div class="mood-value">
+                        <span class="value-number">0</span>
+                        <span class="value-percent">%</span>
+                    </div>
+                </div>
+                <button class="lock-toggle" data-lock="romantic">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <circle cx="12" cy="16" r="1"></circle>
+                        <path d="m7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="slider-container">
+                <input type="range" id="romantic" class="mood-slider" min="0" max="100" value="0" step="5">
+                <div class="slider-fill"></div>
+            </div>
+        </div>
+
+        <!-- Party -->
+        <div class="mood-card" data-mood="party">
+            <div class="mood-card-glow"></div>
+            <div class="mood-card-header">
+                <div class="mood-icon">🎉</div>
+                <div class="mood-details">
+                    <h3 class="mood-title">Party</h3>
+                    <div class="mood-value">
+                        <span class="value-number">0</span>
+                        <span class="value-percent">%</span>
+                    </div>
+                </div>
+                <button class="lock-toggle" data-lock="party">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <circle cx="12" cy="16" r="1"></circle>
+                        <path d="m7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="slider-container">
+                <input type="range" id="party" class="mood-slider" min="0" max="100" value="0" step="5">
+                <div class="slider-fill"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- VISUALIZATION SECTION -->
+    <section class="visualization-section">
+        <div class="viz-container">
+            <h2 class="viz-title">Mood Visualization</h2>
+            <canvas id="moodCanvas" class="mood-canvas"></canvas>
+            <div id="moodLegend" class="mood-legend"></div>
+        </div>
+    </section>
+
+    <script src="app.js"></script>
+</body>
+</html>

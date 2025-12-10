@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Emotion & Gesture Detection</title>
+<link rel="stylesheet" href="camera.css">
+</head>
+<body>
+
+<!-- Background Orbs -->
+<div class="orb one"></div>
+<div class="orb two"></div>
+<div class="orb three"></div>
+
+<!-- Header -->
+<header>
+  <div class="brand">
+    <h1>Emotion & Gesture Detection</h1>
+  </div>
+</header>
+
+<!-- Main Content -->
+<main class="wrap">
+  <section class="grid">
+    <!-- Left: Camera -->
+    <div class="card stage">
+      <div class="stage-header">
+        <div class="live-camera-controls">
+    <button id="toggleCamBtn" class="camera-btn" title="Toggle Camera">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-camera">
+            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+            <circle cx="12" cy="13" r="4"></circle>
+        </svg>
+    </button>
+</div>
+
+      </div>
+
+      <div class="video-wrap" id="videoWrap">
+        <video id="video" autoplay playsinline></video>
+        <canvas id="overlay"></canvas>
+        <div class="placeholder" id="placeholder">
+          Camera is off • Click camera button
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Controls -->
+    <div class="card panel">
+      <!-- Gesture Recognition Display -->
+      <div class="gesture-recognition-panel">
+        <h3>Gesture Recognition</h3>
+        <div id="currentGesture" class="gesture-display">No gesture detected</div>
+        <div class="confidence-bar">
+          <span>Confidence:</span>
+          <div class="confidence-container">
+            <div class="confidence-fill" style="width: 0%"></div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Emotion Recognition Display -->
+      <div class="gesture-recognition-panel" style="margin-top: 20px;">
+        <h3>Emotion Detection</h3>
+        <div id="emotionDetected" class="gesture-display">No face detected</div>
+        
+        <div style="margin-top: 10px;">
+          <div style="display: flex; align-items: center; margin-bottom: 5px;">
+            <span style="width: 80px; font-size: 12px;">Neutral:</span>
+            <div style="flex: 1; height: 8px; background: #333; border-radius: 4px; overflow: hidden;">
+              <div id="neutralBar" style="height: 100%; background: #888; width: 100%"></div>
+            </div>
+          </div>
+          
+          <div style="display: flex; align-items: center; margin-bottom: 5px;">
+            <span style="width: 80px; font-size: 12px;">Happy:</span>
+            <div style="flex: 1; height: 8px; background: #333; border-radius: 4px; overflow: hidden;">
+              <div id="happyBar" style="height: 100%; background: #4CAF50; width: 0%"></div>
+            </div>
+          </div>
+          
+          <div style="display: flex; align-items: center;">
+            <span style="width: 80px; font-size: 12px;">Sad:</span>
+            <div style="flex: 1; height: 8px; background: #333; border-radius: 4px; overflow: hidden;">
+              <div id="sadBar" style="height: 100%; background: #2196F3; width: 0%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="section">
+        <div class="row">
+          <strong>Emotion Detection</strong>
+          <label class="toggle">
+            <input type="checkbox" id="emotionToggle" checked>
+            <span class="track"></span><span class="thumb"></span><span class="glow"></span>
+          </label>
+        </div>
+        <div class="row">
+          <strong>Gesture Detection</strong>
+          <label class="toggle">
+            <input type="checkbox" id="gestureToggle" checked>
+            <span class="track"></span><span class="thumb"></span><span class="glow"></span>
+          </label>
+        </div>
+        <div class="row">
+          <strong>Camera</strong>
+          <label class="toggle">
+            <input type="checkbox" id="cameraToggle">
+            <span class="track"></span><span class="thumb"></span><span class="glow"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="camera.js"></script>
+</body>
+</html>

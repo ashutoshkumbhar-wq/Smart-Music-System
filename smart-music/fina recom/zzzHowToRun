@@ -1,0 +1,25 @@
+SETUP INSTRUCTIONS FOR FINA RECOM:
+
+1. Install dependencies:
+   pip install spotipy pandas tqdm numpy python-dotenv
+
+2. Set up configuration:
+   python config.py
+   (This creates .env template - edit with your Spotify credentials)
+
+3. Configure your .env file with:
+   - SPOTIPY_CLIENT_ID=your_client_id
+   - SPOTIPY_CLIENT_SECRET=your_client_secret
+   - SPOTIPY_REDIRECT_URI=http://localhost:8888/callback
+
+4. Run the system:
+   a) Delete existing metadata.json (if any)
+   b) python combocode.py (creates user profile metadata.json)
+   c) python newmodel.py (starts recommendation engine)
+
+5. Choose your mode:
+   - Comfort Zone: Stay close to favorites
+   - Balanced Explore: Mix of familiar and discovery  
+   - Full Explorer: Maximum discovery
+
+The system will authenticate with Spotify and start playing personalized recommendations!
